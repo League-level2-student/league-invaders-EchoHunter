@@ -5,14 +5,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
-Timer frameDraw;
-	int kills = 0;
+	public static BufferedImage image;
+	public static boolean needImage = true;	
+	public static boolean gotImage = false;	
+	Timer frameDraw;
+int kills = 0;
 	Rocketship r = new Rocketship(250,700, 50,50);
+	ObjectManager m = new ObjectManager(r);	
 	GamePanel(){
 		 titleFont = new Font("Arial", Font.PLAIN, 48);
 		 lowerFont = new Font("Arial", Font.PLAIN, 25);
@@ -23,6 +29,7 @@ Timer frameDraw;
 	Font lowerFont;
 	@Override
 	public void paintComponent(Graphics g){
+		
 		System.out.println("paint");
 		if(currentState == MENU){
 		    drawMenuState(g);
@@ -33,7 +40,7 @@ Timer frameDraw;
 		}
 	}
 	 void updateMenuState() {}
-	 void updateGameState() {  }
+	 void updateGameState() { m.update(); }
 	 void updateEndState()  {  }
 	 void drawMenuState(Graphics g) {
 		 
@@ -49,13 +56,28 @@ Timer frameDraw;
 	 g.setFont(lowerFont);
 	 g.setColor(Color.YELLOW);
 	 g.drawString("Press Space to see instructions", 55, 650 );
+	 
 	 }
 	 void drawGameState(Graphics g) {
 		System.out.println("game");
 		 g.setColor(Color.BLACK);
-	 g.fillRect(0, 0, LeagueInvaders.W, LeagueInvaders.H );
-	 r.draw(g);
+		 g.fillRect(0, 0, LeagueInvaders.W, LeagueInvaders.H);
+	 
+	 loadImage("SPAECE.jpg");
+	 g.drawImage(image,0,0,LeagueInvaders.W, LeagueInvaders.H, null);
+	 m.draw(g);
 	 }
+	 void loadImage(String imageFile) {
+		    if (needImage) {
+		        try {
+		            image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
+			    gotImage = true;
+		        } catch (Exception e) {
+		            
+		        }
+		        needImage = false;
+		    }
+		}
 	 void drawEndState(Graphics g)  {
 		 System.out.println("end");
 		 g.setColor(Color.RED);
@@ -86,6 +108,7 @@ Timer frameDraw;
 		}else if(currentState == END){
 		    updateEndState();
 		}
+		repaint();
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
@@ -114,7 +137,8 @@ Timer frameDraw;
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		r.xSpeed = 0;
+		r.ySpeed = 0;
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
