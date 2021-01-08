@@ -19,6 +19,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 int kills = 0;
 	Rocketship r = new Rocketship(250,700, 50,50);
 	ObjectManager m = new ObjectManager(r);	
+	Timer alienSpawn;
 	GamePanel(){
 		 titleFont = new Font("Arial", Font.PLAIN, 48);
 		 lowerFont = new Font("Arial", Font.PLAIN, 25);
@@ -30,7 +31,7 @@ int kills = 0;
 	@Override
 	public void paintComponent(Graphics g){
 		
-		System.out.println("paint");
+	
 		if(currentState == MENU){
 		    drawMenuState(g);
 		}else if(currentState == GAME){
@@ -59,7 +60,7 @@ int kills = 0;
 	 
 	 }
 	 void drawGameState(Graphics g) {
-		System.out.println("game");
+		
 		 g.setColor(Color.BLACK);
 		 g.fillRect(0, 0, LeagueInvaders.W, LeagueInvaders.H);
 	 
@@ -116,8 +117,14 @@ int kills = 0;
 		if(arg0.getKeyCode()==KeyEvent.VK_ENTER) {
 			if(currentState == END) {
 				currentState = MENU;
-			}else {
+			}
+			else if(currentState == MENU) {
 				currentState++;
+				startGame();
+			}
+			else if (currentState == GAME) {
+				currentState++;
+				endGame();
 			}
 		}
 		if (arg0.getKeyCode()==KeyEvent.VK_UP) {
@@ -132,6 +139,9 @@ int kills = 0;
 		if (arg0.getKeyCode()==KeyEvent.VK_LEFT) {
 		    r.left();
 		}
+		if(arg0.getKeyCode()==KeyEvent.VK_SPACE) {
+			m.addProjectile();
+		}
 	repaint();
 	}
 	@Override
@@ -144,6 +154,14 @@ int kills = 0;
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	void startGame() {
+		 alienSpawn = new Timer(1000 , m);
+		 alienSpawn.start();
+		
+	}
+	void endGame() {
+		alienSpawn.stop();
 	}
 }
 

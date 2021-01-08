@@ -18,6 +18,7 @@ public class Projectile extends GameObject{
 	void update(Graphics g) {
 	    g.setColor(Color.RED);
 	    g.fillRect(x, y, width, height);
+	    super.update();
 	}
 	void draw(Graphics g) {
 		y-=speed;

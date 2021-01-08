@@ -1,8 +1,10 @@
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ObjectManager {
+public class ObjectManager implements ActionListener {
 	Random random = new Random();
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	Rocketship r;
@@ -11,13 +13,19 @@ public class ObjectManager {
 }
 	ArrayList<Alien> aliens = new ArrayList<Alien>();
 void addAlien(){
-	aliens.add(new Alien(random.nextInt(GamePanel.WIDTH),0,50,50));
+	aliens.add(new Alien(random.nextInt(LeagueInvaders.W),1,50,50));
+}
+
+void addProjectile(){
+	projectiles.add(new Projectile(r.x,r.y,35,35));
 }
 void update() {
 	r.update();
+
+
 	for(Alien x: aliens) {
 		x.update();
-		if(x.y < GamePanel.HEIGHT ) {
+		if(x.y > GamePanel.HEIGHT ) {
 			x.isActive = false;
 		}
 	}
@@ -25,7 +33,7 @@ void update() {
 void draw(Graphics g) {
 	r.draw(g);
 	for(Alien x: aliens) {
-		x.draw();
+		x.draw(g);
 	}
 	for(Projectile x: projectiles) {
 		x.draw(g);
@@ -42,5 +50,17 @@ void purgeObjects() {
 			projectiles.remove(x);
 		}
 	}
+}
+void checkCollision() {
+	for(Alien x: aliens ) {
+		if((x.collisionBox.x >= r.collisionBox.x)&&(x.collisionBox.y <= r.collisionBox.y)) {
+			
+		}
+	}
+}
+@Override
+public void actionPerformed(ActionEvent arg0) {
+	// TODO Auto-generated method stub
+	addAlien();
 }
 }
