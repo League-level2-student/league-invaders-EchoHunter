@@ -8,59 +8,95 @@ public class ObjectManager implements ActionListener {
 	Random random = new Random();
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	Rocketship r;
-	ObjectManager(Rocketship s){
-	r= s;
-}
+	int score = 0;
+	
+	ObjectManager(Rocketship s) {
+		r = s;
+	}
+
 	ArrayList<Alien> aliens = new ArrayList<Alien>();
-void addAlien(){
-	aliens.add(new Alien(random.nextInt(LeagueInvaders.W),1,50,50));
-}
 
-void addProjectile(){
-	projectiles.add(new Projectile(r.x,r.y,35,35));
-}
-void update() {
-	r.update();
+	void addAlien() {
+		aliens.add(new Alien(random.nextInt(LeagueInvaders.W), 1, 50, 50));
+	}
 
+	void addProjectile() {
+		projectiles.add(new Projectile(r.x, r.y, 35, 35));
+	}
 
-	for(Alien x: aliens) {
-		x.update();
-		if(x.y > GamePanel.HEIGHT ) {
-			x.isActive = false;
+	void update() {
+		r.update();
+
+		for (Alien x : aliens) {
+			x.update();
+			if (x.y > LeagueInvaders.H) {
+				x.isActive = false;
+				System.out.println("deactivated");
+
+			}
+		}
+		for (Projectile c : projectiles) {
+			System.out.println(projectiles.size());
+			c.update();
+			if(c.y < 0) {
+				c.isActive = false;
+			}
+		}
+		checkCollision();
+		purgeObjects();
+	}
+
+	void draw(Graphics g) {
+		r.draw(g);
+		for (Alien x : aliens) {
+			x.draw(g);
+		}
+		for (Projectile x : projectiles) {
+			x.draw(g);
 		}
 	}
-}
-void draw(Graphics g) {
-	r.draw(g);
-	for(Alien x: aliens) {
-		x.draw(g);
-	}
-	for(Projectile x: projectiles) {
-		x.draw(g);
-	}
-}
-void purgeObjects() {
-	for(Alien x: aliens) {
-	if(x.isActive = false) {
-		aliens.remove(x);
-	}
-	}
-	for(Projectile x: projectiles) {
-		if(x.isActive = false) {
-			projectiles.remove(x);
+
+	void purgeObjects() {
+		for (int i = 0; i < aliens.size(); i++) {
+			if (aliens.get(i).isActive == false) {
+				aliens.remove(i);
+			}
+		}
+		for (int c = 0; c < projectiles.size(); c++) {
+			if (projectiles.get(c).isActive == false) {
+				projectiles.remove(c);
+			}
+		}
+		if (r.isActive == false) {
+
 		}
 	}
-}
-void checkCollision() {
-	for(Alien x: aliens ) {
-		if((x.collisionBox.x >= r.collisionBox.x)&&(x.collisionBox.y <= r.collisionBox.y)) {
-			
+
+	void checkCollision() {
+		for (Alien x : aliens) {
+			for (Projectile f : projectiles) {
+				if (f.collisionBox.intersects(x.collisionBox)) {
+					f.isActive = false;
+					x.isActive = false;
+					score++;
+					System.out.println("checkCollision");
+				}	
+			}
+			if (r.collisionBox.intersects(x.collisionBox)) {
+				r.isActive = false;
+				x.isActive = false;
+				
+				score++;
+				//System.out.println("checkCollisonRocketShip");
+			}
 		}
 	}
-}
-@Override
-public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
-	addAlien();
-}
+	public int getScore() {
+		return score;
+	}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		addAlien();
+	}
 }

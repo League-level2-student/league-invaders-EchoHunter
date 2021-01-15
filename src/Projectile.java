@@ -13,15 +13,16 @@ public class Projectile extends GameObject{
 		if (needImage) {
 		    loadImage ("pew.png");
 		}
-		speed = 10;
+		super.speed = 10;
 	}
-	void update(Graphics g) {
-	    g.setColor(Color.RED);
-	    g.fillRect(x, y, width, height);
-	    super.update();
+	void update() {
+		super.y-=speed;
+		System.out.println(speed + " "+ y);
+		super.update();
 	}
 	void draw(Graphics g) {
-		y-=speed;
+		
+	    
 		if (gotImage) {
 			g.drawImage(image, x, y, width, height, null);
 		} else {

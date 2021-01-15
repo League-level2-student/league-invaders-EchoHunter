@@ -41,7 +41,11 @@ int kills = 0;
 		}
 	}
 	 void updateMenuState() {}
-	 void updateGameState() { m.update(); }
+	 void updateGameState() { m.update();
+	 if(r.isActive = false) {
+		 currentState = END;
+	 }
+	 }
 	 void updateEndState()  {  }
 	 void drawMenuState(Graphics g) {
 		 
@@ -60,13 +64,17 @@ int kills = 0;
 	 
 	 }
 	 void drawGameState(Graphics g) {
-		
+		 String v =String.valueOf(m.getScore());
+		 System.out.println(v);
 		 g.setColor(Color.BLACK);
 		 g.fillRect(0, 0, LeagueInvaders.W, LeagueInvaders.H);
-	 
+		 
 	 loadImage("SPAECE.jpg");
 	 g.drawImage(image,0,0,LeagueInvaders.W, LeagueInvaders.H, null);
 	 m.draw(g);
+	 g.setFont(titleFont);
+	 g.setColor(Color.YELLOW);
+	 g.drawString(v ,10 , 70 );
 	 }
 	 void loadImage(String imageFile) {
 		    if (needImage) {
@@ -89,7 +97,7 @@ int kills = 0;
 	 
 	 g.setFont(lowerFont);
 	 g.setColor(Color.BLACK);
-	 g.drawString("You got "+ kills+" Kills", 55, 400 );
+	 g.drawString("You got "+ m.getScore() +" Kills", 55, 400 );
 	 g.setFont(lowerFont);
 	 g.setColor(Color.BLACK);
 	 g.drawString("Press Enter to Restart", 55, 650 );
@@ -114,9 +122,12 @@ int kills = 0;
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+		
 		if(arg0.getKeyCode()==KeyEvent.VK_ENTER) {
 			if(currentState == END) {
 				currentState = MENU;
+			r = new Rocketship(250,700, 50,50);
+			m = new ObjectManager(r);
 			}
 			else if(currentState == MENU) {
 				currentState++;
