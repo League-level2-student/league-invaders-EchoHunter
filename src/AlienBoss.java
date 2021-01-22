@@ -4,20 +4,21 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class Alien extends GameObject {
+public class AlienBoss extends GameObject {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
 
-	Alien(int a, int b, int c, int d) {
+	AlienBoss(int a, int b, int c, int d) {
 		super(a, b, c, d);
 		System.out.println(a);
 		if (needImage) {
-			loadImage("daalien.png");
+			loadImage("Big Alien.png");
 		}
-		speed = 1;
+		speed = 3;
 		
 	}
+	int health = 50;
 
 	void update() {
 		y += speed;

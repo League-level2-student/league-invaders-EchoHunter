@@ -6,8 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -20,6 +22,9 @@ int kills = 0;
 	Rocketship r = new Rocketship(250,700, 50,50);
 	ObjectManager m = new ObjectManager(r);	
 	Timer alienSpawn;
+	ArrayList<Object> burst = new ArrayList<Object>();
+	long gameSeconds = 0;
+	long projTimeStamp =0;
 	GamePanel(){
 		 titleFont = new Font("Arial", Font.PLAIN, 48);
 		 lowerFont = new Font("Arial", Font.PLAIN, 25);
@@ -97,11 +102,10 @@ int kills = 0;
 	 
 	 g.setFont(lowerFont);
 	 g.setColor(Color.BLACK);
-	 g.drawString("You got "+ m.getScore() +" Kills", 55, 400 );
+	 g.drawString("You Scored "+ m.getScore(), 55, 400 );
 	 g.setFont(lowerFont);
 	 g.setColor(Color.BLACK);
 	 g.drawString("Press Enter to Restart", 55, 650 );
-	 
 	 }
 	 final int MENU = 0;
     final int GAME = 1;
@@ -110,12 +114,19 @@ int kills = 0;
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		gameSeconds++;
+		if(gameSeconds - projTimeStamp > 30) {
+			burst.clear();
+		}
 		if(currentState == MENU){
 		    updateMenuState();
 		}else if(currentState == GAME){
 		    updateGameState();
 		}else if(currentState == END){
 		    updateEndState();
+		}
+		if(r.isActive = false) {
+			currentState = END;
 		}
 		repaint();
 	}
@@ -151,15 +162,28 @@ int kills = 0;
 		    r.left();
 		}
 		if(arg0.getKeyCode()==KeyEvent.VK_SPACE) {
+			if(currentState==MENU) {
+				JOptionPane.showMessageDialog(null, "Press Space to Shoot, arrow keys to move, the small guys have 1 health, big guys have 50, you have a single fire and a 10 round burst. Don't Die");
+			}
+			if(burst.size()<=10) {
 			m.addProjectile();
+			burst.add(new Object());
+			projTimeStamp=gameSeconds;
+			}
+			
 		}
 	repaint();
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		r.xSpeed = 0;
-		r.ySpeed = 0;
+		if((arg0.getKeyCode()==KeyEvent.VK_LEFT)||(arg0.getKeyCode()==KeyEvent.VK_RIGHT)) {
+			r.xSpeed = 0;
+		}
+		if((arg0.getKeyCode()==KeyEvent.VK_UP)||(arg0.getKeyCode()==KeyEvent.VK_DOWN)) {
+			r.ySpeed = 0;
+		}
+		
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
@@ -175,4 +199,5 @@ int kills = 0;
 		alienSpawn.stop();
 	}
 }
+
 
