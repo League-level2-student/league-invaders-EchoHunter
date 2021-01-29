@@ -19,7 +19,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public static boolean gotImage = false;	
 	Timer frameDraw;
 int kills = 0;
-	Rocketship r = new Rocketship(250,700, 50,50);
+	Rocketship r = new Rocketship(250,700, 50, 85);
 	ObjectManager m = new ObjectManager(r);	
 	Timer alienSpawn;
 	ArrayList<Object> burst = new ArrayList<Object>();
@@ -47,7 +47,7 @@ int kills = 0;
 	}
 	 void updateMenuState() {}
 	 void updateGameState() { m.update();
-	 if(r.isActive = false) {
+	 if(m.r.isActive == false) {
 		 currentState = END;
 	 }
 	 }
@@ -93,7 +93,7 @@ int kills = 0;
 		    }
 		}
 	 void drawEndState(Graphics g)  {
-		 System.out.println("end");
+		 
 		 g.setColor(Color.RED);
 	 g.fillRect(0, 0, LeagueInvaders.W, LeagueInvaders.H); 
 	 g.setFont(titleFont);
@@ -115,20 +115,20 @@ int kills = 0;
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		gameSeconds++;
-		if(gameSeconds - projTimeStamp > 30) {
+		if(gameSeconds - projTimeStamp > 10) {
 			burst.clear();
 		}
 		if(currentState == MENU){
 		    updateMenuState();
 		}else if(currentState == GAME){
 		    updateGameState();
+		  
 		}else if(currentState == END){
 		    updateEndState();
 		}
-		if(r.isActive = false) {
-			currentState = END;
-		}
+		
 		repaint();
+		
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
@@ -137,7 +137,7 @@ int kills = 0;
 		if(arg0.getKeyCode()==KeyEvent.VK_ENTER) {
 			if(currentState == END) {
 				currentState = MENU;
-			r = new Rocketship(250,700, 50,50);
+			r = new Rocketship(250,700, 50,85);
 			m = new ObjectManager(r);
 			}
 			else if(currentState == MENU) {
@@ -165,7 +165,7 @@ int kills = 0;
 			if(currentState==MENU) {
 				JOptionPane.showMessageDialog(null, "Press Space to Shoot, arrow keys to move, the small guys have 1 health, big guys have 50, you have a single fire and a 10 round burst. Don't Die");
 			}
-			if(burst.size()<=10) {
+			if(burst.size()<=3) {
 			m.addProjectile();
 			burst.add(new Object());
 			projTimeStamp=gameSeconds;

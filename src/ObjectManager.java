@@ -19,11 +19,11 @@ public class ObjectManager implements ActionListener {
 	ArrayList<AlienBoss> bigalien = new ArrayList<AlienBoss>();
 	void addAlien() {
 		alienSpawned++;
-		if(alienSpawned%20==4) {
+		if(alienSpawned%21==20) {
 			bigalien.add(new AlienBoss(random.nextInt(LeagueInvaders.W), 1, 100, 100));
 		}
 		else{
-		aliens.add(new Alien(random.nextInt(LeagueInvaders.W), 1, 50, 50));
+		aliens.add(new Alien(random.nextInt(450), 1, 50, 50));
 		
 		}
 	}
@@ -91,9 +91,7 @@ public class ObjectManager implements ActionListener {
 				projectiles.remove(c);
 			}
 		}
-		if (r.isActive == false) {
-
-		}
+		
 	}
 
 	void checkCollision() {
@@ -109,7 +107,7 @@ public class ObjectManager implements ActionListener {
 			if (r.collisionBox.intersects(x.collisionBox)) {
 				r.isActive = false;
 				x.isActive = false;
-				
+				System.out.println("inactive");
 				
 				
 			}
@@ -127,6 +125,7 @@ public class ObjectManager implements ActionListener {
 			}
 			if (r.collisionBox.intersects(x.collisionBox)) {
 				r.isActive = false;
+				System.out.println("inactive");
 				x.health--;
 				if(x.health<=0) {
 					x.isActive = false;
